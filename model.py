@@ -117,7 +117,7 @@ class CIFAR10Model(nn.Module):
         return F.log_softmax(x)
 
 #Best accuracy - 83% (test) 88% train for 20 epochs
-# with augmentaions - 79% test and 705 train
+# with augmentaions - 79% test and 70% train
 # Total params: 309,354
 # Choose this as Baseline
 
