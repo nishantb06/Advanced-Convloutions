@@ -66,17 +66,17 @@ class args():
         self.batch_size = 128
         self.device = device
         self.use_cuda = use_cuda
-        self.kwargs = {'num_workers': 1, 'pin_memory': True} if self.use_cuda else {}
+        self.kwargs = {'num_workers': 2, 'pin_memory': True} if self.use_cuda else {}
 
 trainset = Cifar10SearchDataset(root='./data', train=True,
                                         download=True, transform=train_transforms)
                                         
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=args().batch_size,
-                                          shuffle=True, **args().kwargs)
+                                          shuffle=True, **args(use_cuda=True).kwargs)
 
 
 testset = Cifar10SearchDataset(root='./data', train=False,
                                        download=True, transform=test_transforms)
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=args().batch_size,
-                                         shuffle=False, **args().kwargs)
+                                         shuffle=False, **args(use_cuda=True).kwargs)

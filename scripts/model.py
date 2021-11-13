@@ -244,5 +244,123 @@ class Net1(nn.Module):
         return F.log_softmax(x, dim=-1)
 
 
+# Total params: 197,450
+class Net3(nn.Module):
+    def __init__(self,dropout_value = 0.1):
+        
+        super(Net3,self).__init__()
 
+        self.dropout_value = dropout_value
 
+        self.convblock1 = nn.Sequential(
+            nn.Conv2d(in_channels=3, out_channels=32,
+                      kernel_size=(3, 3), padding=1, bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        ) 
+        #output - 32
+
+        self.convblock2 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=64,
+                      kernel_size=(3, 3), padding=1,dilation = 2, bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        )
+        #output  - 30
+
+        self.convblock3 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=32,
+                      kernel_size=(3, 3), padding=1,stride = 2,  bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        ) #output = 15
+
+        self.depthwise4 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=32,
+                      kernel_size=(3, 3), padding=1, groups=32, bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        ) #output = 15
+
+        self.pointwise4 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=64,
+                      kernel_size=(1, 1), bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        ) #output = 15
+
+        self.convblock5 = nn.Sequential(
+            nn.Conv2d(in_channels = 64, out_channels=64,
+                      kernel_size=(3, 3), padding=1, bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        )
+        #output = 15
+        self.convblock6 = nn.Sequential(
+            nn.Conv2d(in_channels = 64, out_channels=32,
+                      kernel_size=(3, 3), padding=1,stride = 2, bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        )
+        #output = 8
+
+        self.dilation7 = nn.Sequential(
+            nn.Conv2d(in_channels = 32, out_channels=64,
+                      kernel_size=(3, 3), padding=0, bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        )
+        #output = 6
+
+        self.convblock8 = nn.Sequential(
+            nn.Conv2d(in_channels = 64, out_channels=128,
+                      kernel_size=(3, 3), bias=False),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Dropout(self.dropout_value)
+        )
+        #output = 4
+
+        self.gap = nn.Sequential(
+            nn.AvgPool2d(kernel_size=4)
+            )# output size = 1 rf=34
+        
+        self.fc1 = nn.Linear(in_features=128,out_features=64)
+        self.fc2 = nn.Linear(in_features=64,out_features=10)
+        #self.fc3 = nn.Linear(in_features=128,out_features=10
+
+    def forward(self,x):
+
+        x = self.convblock1(x)
+        x = self.convblock2(x)
+
+        x = self.convblock3(x)
+        
+        x = self.depthwise4(x)
+        x = self.pointwise4(x)
+        x = self.convblock5(x)
+
+        x = self.convblock6(x)
+        
+        x = self.dilation7(x)
+        x = self.convblock8(x)
+
+        x = self.gap(x)
+
+        x = x.view(-1,128)
+        
+        x = self.fc1(x)
+        x = self.fc2(x)
+        #x = self.fc3(x)
+        
+        x = x.view(-1, 10)
+        
+        return F.log_softmax(x, dim=-1)
