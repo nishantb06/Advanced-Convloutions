@@ -245,6 +245,7 @@ class Net1(nn.Module):
 
 
 # Total params: 197,450
+# reached 80% in the 33rd epoch and didnt cross 81 even after 61 epochs
 class Net3(nn.Module):
     def __init__(self,dropout_value = 0.1):
         
@@ -366,6 +367,9 @@ class Net3(nn.Module):
         return F.log_softmax(x, dim=-1)
 
 
+# Total params: 176,234
+
+
 class Net4(nn.Module):
     def __init__(self,dropout_value = 0.02):
         
@@ -380,7 +384,7 @@ class Net4(nn.Module):
             nn.ReLU(),
             nn.Dropout(self.dropout_value)
         ) 
-        #output - 32
+        #output - 32 rf - 3
 
         self.convblock2 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=64,  
@@ -389,7 +393,7 @@ class Net4(nn.Module):
             nn.ReLU(),
             nn.Dropout(self.dropout_value)
         )
-        #output  - 32
+        #output  - 32 rf - 5
 
         self.convblock3 = nn.Sequential(
             nn.Conv2d(in_channels=64, out_channels=32,
@@ -397,7 +401,7 @@ class Net4(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout(self.dropout_value)
-        ) #output = 16
+        ) #output = 16 rf - 7
 
         self.convblock4 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=64,
@@ -405,7 +409,7 @@ class Net4(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout(self.dropout_value)
-        ) #output = 16
+        ) #output = 16 rf = 11
 
         self.convblock5 = nn.Sequential(
             nn.Conv2d(in_channels = 64, out_channels=96,
@@ -414,7 +418,7 @@ class Net4(nn.Module):
             nn.ReLU(),
             nn.Dropout(self.dropout_value)
         )
-        #output = 16
+        #output = 16 rf = 15
         self.convblock6 = nn.Sequential(
             nn.Conv2d(in_channels = 96, out_channels=32,
                       kernel_size=(3, 3), padding=1,stride = 2, bias=False),
@@ -422,7 +426,7 @@ class Net4(nn.Module):
             nn.ReLU(),
             nn.Dropout(self.dropout_value)
         )
-        #output = 8
+        #output = 8 rf = 19
 
         self.dilation7 = nn.Sequential(
             nn.Conv2d(in_channels = 32, out_channels=64,
@@ -431,7 +435,7 @@ class Net4(nn.Module):
             nn.ReLU(),
             nn.Dropout(self.dropout_value)
         )
-        #output = 6
+        #output = 6 rf = 27
 
         self.depthwise8 = nn.Sequential(
             nn.Conv2d(in_channels = 64, out_channels = 64,
