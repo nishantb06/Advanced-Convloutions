@@ -44,5 +44,6 @@ Dilated and Depth wise convolutions are used whenever we want to reduce the FLOP
 
 # Group members
 Nishant Bhansali
+
 Ruchika Agrawal
  
