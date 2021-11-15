@@ -42,4 +42,7 @@ Dilated and Depth wise convolutions are used whenever we want to reduce the FLOP
 - Highest test accuracy - 85.2%
 - First reached 85% in the 42nd epoch 
 
+# Group members
+Nishant Bhansali
+Ruchika Agrawal
  
